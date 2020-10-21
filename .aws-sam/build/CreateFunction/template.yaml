@@ -18,7 +18,7 @@ Resources:
     Type: AWS::Serverless::Function 
     Properties:
       FunctionName: CreateFunction
-      Description: Lambda function to get models data based on maker id
+      Description: Lambda function to insert data into table.
       CodeUri: .
       Handler: index.create
       Policies: AmazonDynamoDBFullAccess
@@ -29,6 +29,52 @@ Resources:
           Properties:
             Path: /todo/new
             Method: post
+  GetAllFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetAllFunction
+      Description: Lambda function to get all the data from the table.
+      Policies: AmazonDynamoDBReadOnlyAccess
+      CodeUri: .
+      Handler: index.getAll
+      Runtime: nodejs12.x
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /todo/all
+  UpdateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateFunction
+      Description: Lambda function to update specific record.
+      Policies: AmazonDynamoDBFullAccess
+      CodeUri: .
+      Handler: index.update
+      Runtime: nodejs12.x
+      Events:
+        PutResource:
+          Type: Api
+          Properties:
+            Method: put
+            Path: /todo/update
+  DeleteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteFunction
+      Description: Lambda function to delete specific record.
+      Policies: AmazonDynamoDBFullAccess
+      CodeUri: .
+      Handler: index.delete
+      Runtime: nodejs12.x
+      Events:
+        DeleteResource:
+          Type: Api
+          Properties:
+            Method: delete
+            Path: /todo/delete
+  
   Table:
     Type: AWS::Serverless::SimpleTable
     Properties:
@@ -41,8 +87,17 @@ Resources:
       TableName: my-db-table
 Outputs:
   CreateAPI:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/dev"
+    Description: "API Gateway endpoint URL for Dev stage for create record function."
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
   CreateFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "CreateFunction ARN"
     Value: !GetAtt CreateFunction.Arn
+  GetAllFunction:
+    Description: "Get All Function ARN"
+    Value: !GetAtt GetAllFunction.Arn
+  UpdateFunction:
+    Description: "Update function ARN"
+    Value: !GetAtt UpdateFunction.Arn
+  DeleteFunction:
+    Description: "DeleteFunction ARN"
+    Value: !GetAtt DeleteFunction.Arn

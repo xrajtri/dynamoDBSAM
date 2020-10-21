@@ -2,9 +2,9 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "dynamo1"
+stack_name = "dynamodb-ops"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-dgb3stubi5xa"
-s3_prefix = "dynamo1"
+s3_prefix = "dynamodb-ops"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
